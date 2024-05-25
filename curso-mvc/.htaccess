@@ -1,0 +1,12 @@
+#observação: Antes de escrever as regras temos que habilitar dentro do arquivo httpd.conf alinha onde tem 'LoadModule rewrite_module modules/mod_rewrite.so'
+
+#Esta linha habilita o mecanismo de reescrita de URLs do Apache. É necessário ativá-lo antes de usar as diretivas de reescrita.
+RewriteEngine On
+#Esta condição verifica se o nome de arquivo especificado na URL não corresponde a um arquivo físico existente no servidor. O !-f significa "não é um arquivo".
+RewriteCond %{REQUEST_FILENAME} !f
+#Similar à linha anterior, esta condição verifica se o nome de arquivo especificado na URL não corresponde a um diretório existente no servidor. O !-d significa "não é um diretório".
+RewriteCond %{REQUEST_FILENAME} !d
+# Esta regra de reescrita captura qualquer requisição (indicado pelo ^(.*)$, onde ^ e $ são o início e o fim da string, respectivamente, e .* captura qualquer sequência de caracteres) e redireciona para index.php, passando a URL original como um parâmetro chamado router.
+# QSA (Query String Append) significa que a string de consulta original será preservada e anexada ao final da nova URL, permitindo que parâmetros adicionais sejam passados na URL original e mantidos.
+# L (Last) indica que se esta regra for correspondida, nenhuma outra regra abaixo dela será processada.
+RewriteRule ^(.*)$ index.php?router=$1 [QSA,L]
